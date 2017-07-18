@@ -1,172 +1,86 @@
+import entity.OpenBook;
+import entity.Trades;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToJSON {
 
-	public static ArrayList<String[]> toJsonTrades(String strJson, Pairs pair) {
-		ArrayList<String[]> arrL = new ArrayList<String[]>();
+    private static JSONObject dataJsonObj;
+    private static JSONArray array;
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		JSONArray array = dataJsonObj.getJSONArray(pair.toString());
+    public static ArrayList<Trades> toJsonTrades(String strJson, Pairs pair) {
+        ArrayList<Trades> list = new ArrayList<>();
 
-		for (int i = 0; i < array.length(); i++) {
-			arrL.add(new String[6]);
-			arrL.get(arrL.size() - 1)[0] = array.getJSONObject(i).get("trade_id").toString();
-			arrL.get(arrL.size() - 1)[1] = array.getJSONObject(i).get("type").toString();
-			arrL.get(arrL.size() - 1)[2] = array.getJSONObject(i).get("quantity").toString();
-			arrL.get(arrL.size() - 1)[3] = array.getJSONObject(i).get("price").toString();
-			arrL.get(arrL.size() - 1)[4] = array.getJSONObject(i).get("amount").toString();
-			arrL.get(arrL.size() - 1)[5] = array.getJSONObject(i).get("date").toString();
-		}
-		return arrL;
-	}
+        dataJsonObj = new JSONObject(strJson);
+        array = dataJsonObj.getJSONArray(pair.toString());
 
-	public static String[] toJsonPublStatist(String strJson, Pairs pair) {
-		String[] arrL = new String[9];
+        for (int i = 0; i < array.length(); i++) {
+            Trades trades = new Trades();
+            JSONObject object = array.getJSONObject(i);
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		JSONObject object = dataJsonObj.getJSONObject(pair.toString());
+            trades.setDate(object.get("date").toString());
+            trades.setAmount(object.get("amount").toString());
+            trades.setTrade_id(object.get("trade_id").toString());
+            trades.setQuantity(object.get("quantity").toString());
+            trades.setPrice(object.get("price").toString());
+            trades.setType(object.get("type").toString());
+            list.add(trades);
+        }
+        return list;
+    }
 
-		arrL[0] = object.get("buy_price").toString();
-		arrL[1] = object.get("sell_price").toString();
-		arrL[2] = object.get("last_trade").toString();
-		arrL[3] = object.get("high").toString();
-		arrL[4] = object.get("low").toString();
-		arrL[5] = object.get("avg").toString();
-		arrL[6] = object.get("vol").toString();
-		arrL[7] = object.get("vol_curr").toString();
-		arrL[8] = object.get("updated").toString();
+    public static ArrayList<OpenBook> toJsonOpenOrders(String strJson, Pairs pair) {
+        ArrayList<OpenBook> list = new ArrayList<>();
+        dataJsonObj = new JSONObject(strJson);
 
-		return arrL;
-	}
+        JSONObject object = dataJsonObj.getJSONObject(pair.toString());
+        System.out.println(object.toString());
 
-	public static String[] toJsonUserInf(String strJson) {
-		String[] arrL = new String[22];
+        OpenBook openBook = new OpenBook();
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		JSONObject balances = dataJsonObj.getJSONObject("balances");
-		JSONObject reserved = dataJsonObj.getJSONObject("reserved");
+//        try {
+            openBook.setAsk_quantity(object.get("ask_quantity").toString());
+            openBook.setAsk_amount(object.get("ask_amount").toString());
+            openBook.setAsk_top(object.get("ask_top").toString());
 
-		arrL[0] = dataJsonObj.get("uid").toString();
-		arrL[1] = dataJsonObj.get("server_date").toString();
+            openBook.setBid_amount(object.get("bid_amount").toString());
+            openBook.setBid_quantity(object.get("bid_quantity").toString());
+            openBook.setBid_top(object.get("bid_top").toString());
 
-		arrL[2] = balances.get("USD").toString();
-		arrL[3] = balances.get("EUR").toString();
-		arrL[4] = balances.get("RUB").toString();
-		arrL[5] = balances.get("UAH").toString();
-		arrL[6] = balances.get("BTC").toString();
-		arrL[7] = balances.get("LTC").toString();
-		arrL[8] = balances.get("DOGE").toString();
-		arrL[9] = balances.get("DASH").toString();
-		arrL[10] = balances.get("ETH").toString();
-		arrL[11] = balances.get("WAVES").toString();
+            JSONArray bid = object.getJSONArray("bid");
+            JSONArray ask = object.getJSONArray("ask");
 
-		arrL[12] = reserved.get("USD").toString();
-		arrL[13] = reserved.get("EUR").toString();
-		arrL[14] = reserved.get("RUB").toString();
-		arrL[15] = reserved.get("UAH").toString();
-		arrL[16] = reserved.get("BTC").toString();
-		arrL[17] = reserved.get("LTC").toString();
-		arrL[18] = reserved.get("DOGE").toString();
-		arrL[19] = reserved.get("DASH").toString();
-		arrL[20] = reserved.get("ETH").toString();
-		arrL[21] = reserved.get("WAVES").toString();
 
-		return arrL;
-	}
+            openBook.setBid(getStrings(bid) );
 
-	public static String[] toJsonOrdCreate(String strJson) {
-		String[] arrL = new String[3];
+//            arrayList=new ArrayList<>();
+//            for (int i = 0; i < bid.length(); i++) {
+//                arrayList.add(ask.getString(i));
+//            }
+//            openBook.setAsk(arrayList);
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
+//        } catch (JSONException e) {
+//            System.out.println("wrong");
+//        }
 
-		arrL[0] = dataJsonObj.get("result").toString();
-		arrL[1] = dataJsonObj.get("error").toString();
-		try {
-			arrL[2] = dataJsonObj.get("order_id").toString();
-		} catch (Exception e) {
-			arrL[2] = "-1";
-		}
-		return arrL;
-	}
-	
-	public static String[] toJsonOrdCancel(String strJson) {
-		String[] arrL = new String[2];
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
+        list.add(openBook);
+//        }
+        return list;
+    }
 
-		arrL[0] = dataJsonObj.get("result").toString();
-		arrL[1] = dataJsonObj.get("error").toString();
-		return arrL;
-	}
-	
-	public static ArrayList<String[]> toJsonOpenOrders(String strJson, Pairs pair) {
-		ArrayList<String[]> arrL = new ArrayList<String[]>();
+    private static ArrayList<double[]> getStrings(JSONArray array) {
+        ArrayList<double[]>list=new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONArray a=array.getJSONArray(i);
+            list.add(new double[]{a.getDouble(0),a.getDouble(1),a.getDouble(2)});
 
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		JSONArray array = dataJsonObj.getJSONArray(pair.toString());
-
-		for (int i = 0; i < array.length(); i++) {
-			arrL.add(new String[7]);
-			arrL.get(arrL.size() - 1)[0] = array.getJSONObject(i).get("order_id").toString();
-			arrL.get(arrL.size() - 1)[1] = array.getJSONObject(i).get("created").toString();
-			arrL.get(arrL.size() - 1)[2] = array.getJSONObject(i).get("type").toString();
-			arrL.get(arrL.size() - 1)[3] = array.getJSONObject(i).get("pair").toString();
-			arrL.get(arrL.size() - 1)[4] = array.getJSONObject(i).get("price").toString();
-			arrL.get(arrL.size() - 1)[5] = array.getJSONObject(i).get("quantity").toString();
-			arrL.get(arrL.size() - 1)[6] = array.getJSONObject(i).get("amount").toString();
-		}
-		return arrL;
-	}
-	
-	public static ArrayList<String[]> toJsonUserTrades(String strJson, Pairs pair) {
-		ArrayList<String[]> arrL = new ArrayList<String[]>();
-
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		JSONArray array = dataJsonObj.getJSONArray(pair.toString());
-
-		for (int i = 0; i < array.length(); i++) {
-			arrL.add(new String[8]);
-			arrL.get(arrL.size() - 1)[0] = array.getJSONObject(i).get("trade_id").toString();
-			arrL.get(arrL.size() - 1)[1] = array.getJSONObject(i).get("date").toString();
-			arrL.get(arrL.size() - 1)[2] = array.getJSONObject(i).get("type").toString();
-			arrL.get(arrL.size() - 1)[3] = array.getJSONObject(i).get("pair").toString();
-			arrL.get(arrL.size() - 1)[4] = array.getJSONObject(i).get("order_id").toString();
-			arrL.get(arrL.size() - 1)[5] = array.getJSONObject(i).get("quantity").toString();
-			arrL.get(arrL.size() - 1)[6] = array.getJSONObject(i).get("price").toString();
-			arrL.get(arrL.size() - 1)[7] = array.getJSONObject(i).get("amount").toString();
-		}
-		return arrL;
-	}
-	
-	public static ArrayList<String[]> toJsonOrdTradesById(String strJson) {
-		ArrayList<String[]> arrL = new ArrayList<String[]>();
-
-		JSONObject dataJsonObj = new JSONObject(strJson);
-		
-		arrL.add(new String[5]);
-		arrL.get(arrL.size() - 1)[0] = dataJsonObj.get("type").toString();
-		arrL.get(arrL.size() - 1)[1] = dataJsonObj.get("in_currency").toString();
-		arrL.get(arrL.size() - 1)[2] = dataJsonObj.get("in_amount").toString();
-		arrL.get(arrL.size() - 1)[3] = dataJsonObj.get("out_currency").toString();
-		arrL.get(arrL.size() - 1)[4] = dataJsonObj.get("out_amount").toString();
-		
-		JSONArray array = dataJsonObj.getJSONArray("trades");
-
-		for (int i = 0; i < array.length(); i++) {
-			arrL.add(new String[8]);
-			arrL.get(arrL.size() - 1)[0] = array.getJSONObject(i).get("trade_id").toString();
-			arrL.get(arrL.size() - 1)[1] = array.getJSONObject(i).get("date").toString();
-			arrL.get(arrL.size() - 1)[2] = array.getJSONObject(i).get("type").toString();
-			arrL.get(arrL.size() - 1)[3] = array.getJSONObject(i).get("pair").toString();
-			arrL.get(arrL.size() - 1)[4] = array.getJSONObject(i).get("order_id").toString();
-			arrL.get(arrL.size() - 1)[5] = array.getJSONObject(i).get("quantity").toString();
-			arrL.get(arrL.size() - 1)[6] = array.getJSONObject(i).get("price").toString();
-			arrL.get(arrL.size() - 1)[7] = array.getJSONObject(i).get("amount").toString();
-		}
-		return arrL;
-	}
+        }
+        return list;
+    }
 
 }
