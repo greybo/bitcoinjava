@@ -1,15 +1,24 @@
 package entity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by m on 18.07.17.
  */
+@DatabaseTable
 public class Trades {
-
+@DatabaseField
     private String trade_id;
+    @DatabaseField
     private String type;
+    @DatabaseField
     private String quantity;
+    @DatabaseField
     private String price;
+    @DatabaseField
     private String amount;
+    @DatabaseField
     private String date;
 
     public Trades() {

@@ -1,4 +1,6 @@
-public enum Pairs {
+package service;
+
+public  enum Pairs {
 	BTC_USD, BTC_EUR, BTC_RUB, BTC_UAH, 
 	DASH_BTC, DASH_USD, ETH_BTC, ETH_USD, 
 	DOGE_BTC, LTC_BTC, ETH_RUB, ETH_EUR, 

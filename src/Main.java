@@ -1,12 +1,21 @@
-import entity.OpenBook;
-import entity.Trades;
+import service.OpenBookService;
+import service.Pairs;
+import service.TradesService;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Main {
 
+
     public static void main(String[] args) {
+        OpenBookService obs = null;
+        TradesService ts = null;
+
+        obs = new OpenBookService();
+//            ts = new TradesService();
+
+
         Pairs pair = Pairs.BTC_USD;
 //        String method = "trades";
         String method = "order_book";
@@ -17,14 +26,19 @@ public class Main {
             put("offset", "0");
         }});
 
-        ArrayList<OpenBook> listOpen = ToJSON.toJsonOpenOrders(result, pair);
-        for (OpenBook t : listOpen) {
-            System.out.println(t.toString());
-            for (double[] a : t.getBid()) {
-                System.out.println(a[0]+" "+a[1]+" "+a[2]);
-            }
+//         obs.toJsonOpenOrders(result,pair);
+//        System.out.println(obs.getAll());
+//            System.out.println(obs.getAll());
 
-        }
+
+//        ArrayList<OpenBook> listOpen = ToJSON.toJsonOpenOrders(result, pair);
+//        for (OpenBook t : listOpen) {
+//            System.out.println(t.toString());
+//            for (double[] a : t.getBid()) {
+//                System.out.println(a[0] + " " + a[1] + " " + a[2]);
+//            }
+//        }
+
 
     }
 }
