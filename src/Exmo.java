@@ -31,7 +31,7 @@ public class Exmo {
         SecretKeySpec key;
         String sign;
 
-        if (arguments == null) {  // If the user provided no arguments, just create an empty argument array.
+        if (arguments == null) {  // If the user provided no arguments, just save an empty argument array.
             arguments = new HashMap<>();
         }
 

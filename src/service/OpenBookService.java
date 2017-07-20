@@ -16,7 +16,8 @@ import java.util.List;
  * Created by m on 18.07.17.
  */
 public class OpenBookService {
-    private final String url = "jdbc:sqlite:main.sqlite";
+    private final String url = "jdbc:sqlite:openbook.db";
+
     private ConnectionSource source;
     private Dao<OpenBook, String> dao;
 
@@ -38,9 +39,11 @@ public class OpenBookService {
         return null;
     }
 
-    public void create(OpenBook openBook) {
+    public void save(OpenBook openBook) {
         try {
             dao.create(openBook);
+//            Dao.CreateOrUpdateStatus cous = dao.createOrUpdate(openBook);
+//            System.out.println("save: "+cous.isCreated());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,16 +58,15 @@ public class OpenBookService {
         return 0;
     }
 
-    public ArrayList<OpenBook> toJsonOpenOrders(String strJson, Pairs pair) {
-        ArrayList<OpenBook> list = new ArrayList<>();
+    //    public ArrayList<OpenBook> toJsonOpenOrders(String strJson, Pairs pair) {
+    public void toJsonOpenOrders(String strJson, Pairs pair) {
+//        ArrayList<OpenBook> list = new ArrayList<>();
         JSONObject dataJsonObj = new JSONObject(strJson);
-
         JSONObject object = dataJsonObj.getJSONObject(pair.toString());
-//        System.out.println(object.toString());
-
         OpenBook openBook = new OpenBook();
 
-//        try {
+//        System.out.println(object.toString());
+
         openBook.setAsk_quantity(object.get("ask_quantity").toString());
         openBook.setAsk_amount(object.get("ask_amount").toString());
         openBook.setAsk_top(object.get("ask_top").toString());
@@ -76,24 +78,9 @@ public class OpenBookService {
         JSONArray bid = object.getJSONArray("bid");
         JSONArray ask = object.getJSONArray("ask");
 
+        save(openBook);
 
-//        openBook.setBid(getStrings(bid));
-
-//            arrayList=new ArrayList<>();
-//            for (int i = 0; i < bid.length(); i++) {
-//                arrayList.add(ask.getString(i));
-//            }
-//            openBook.setAsk(arrayList);
-
-//        } catch (JSONException e) {
-//            System.out.println("wrong");
-//        }
-
-
-//        list.add(openBook);
-        create(openBook);
-//        }
-        return list;
+//        return list;
     }
 
     private static ArrayList<double[]> getStrings(JSONArray array) {

@@ -11,6 +11,9 @@ import java.util.ArrayList;
  */
 @DatabaseTable(tableName = "openbook")
 public class OpenBook {
+
+    @DatabaseField(generatedId = true)
+    private long id_book;
     @DatabaseField
     private String ask_quantity;
     @DatabaseField
@@ -23,12 +26,21 @@ public class OpenBook {
     private String bid_amount;
     @DatabaseField
     private String bid_top;
-//    @ForeignCollectionField
+
+//    @DatabaseField
 //    private ArrayList<double[]> bid;
 //    @ForeignCollectionField
 //    private ArrayList<double[]> ask;
 
     public OpenBook() {
+    }
+
+    public long getId_book() {
+        return id_book;
+    }
+
+    public void setId_book(long id_book) {
+        this.id_book = id_book;
     }
 
     public String getAsk_quantity() {
@@ -79,7 +91,6 @@ public class OpenBook {
         this.bid_top = bid_top;
     }
 
-//
 
     @Override
     public String toString() {
