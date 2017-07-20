@@ -1,7 +1,6 @@
 package entity;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 public class OpenBook {
 
     @DatabaseField(generatedId = true)
-    private long id_book;
+    private long id;
     @DatabaseField
     private String ask_quantity;
     @DatabaseField
@@ -26,21 +25,21 @@ public class OpenBook {
     private String bid_amount;
     @DatabaseField
     private String bid_top;
+    @DatabaseField(columnName = "bid", foreign = true)
+    private ArrayList<BookBid> bid;
 
-//    @DatabaseField
-//    private ArrayList<double[]> bid;
 //    @ForeignCollectionField
 //    private ArrayList<double[]> ask;
 
     public OpenBook() {
     }
 
-    public long getId_book() {
-        return id_book;
+    public long getId() {
+        return id;
     }
 
-    public void setId_book(long id_book) {
-        this.id_book = id_book;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAsk_quantity() {
@@ -91,17 +90,25 @@ public class OpenBook {
         this.bid_top = bid_top;
     }
 
+    public ArrayList<BookBid> getBid() {
+        return bid;
+    }
+
+    public void setBid(ArrayList<BookBid> bid) {
+        this.bid = bid;
+    }
 
     @Override
     public String toString() {
         return "OpenBook{" +
-                "ask_quantity='" + ask_quantity + '\'' +
+                "id=" + id +
+                ", ask_quantity='" + ask_quantity + '\'' +
                 ", ask_amount='" + ask_amount + '\'' +
                 ", ask_top='" + ask_top + '\'' +
                 ", bid_quantity='" + bid_quantity + '\'' +
                 ", bid_amount='" + bid_amount + '\'' +
                 ", bid_top='" + bid_top + '\'' +
-
+                ", bid=" + bid +
                 '}';
     }
 }

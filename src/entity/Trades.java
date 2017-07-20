@@ -8,8 +8,10 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable
 public class Trades {
-@DatabaseField
-    private String trade_id;
+    @DatabaseField(generatedId = true)
+    private long id;
+    @DatabaseField(uniqueIndex = true)
+    private long trade_id;
     @DatabaseField
     private String type;
     @DatabaseField
@@ -25,11 +27,11 @@ public class Trades {
 
     }
 
-    public String getTrade_id() {
+    public long getTrade_id() {
         return trade_id;
     }
 
-    public void setTrade_id(String trade_id) {
+    public void setTrade_id(long trade_id) {
         this.trade_id = trade_id;
     }
 

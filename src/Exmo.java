@@ -32,7 +32,7 @@ public class Exmo {
         String sign;
 
         if (arguments == null) {  // If the user provided no arguments, just save an empty argument array.
-            arguments = new HashMap<>();
+            arguments = new HashMap<String, String>();
         }
 
         arguments.put("nonce", "" + ++_nonce);  // Add the dummy nonce.

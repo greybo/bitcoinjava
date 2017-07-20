@@ -1,4 +1,4 @@
-package service;
+package dao;
 
 public  enum Pairs {
 	BTC_USD, BTC_EUR, BTC_RUB, BTC_UAH, 

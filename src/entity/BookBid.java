@@ -17,6 +17,12 @@ public class BookBid {
     public BookBid() {
     }
 
+    public BookBid(double price, double lot, double vol) {
+        this.price = price;
+        this.lot = lot;
+        this.vol = vol;
+    }
+
     public long getId() {
         return id;
     }

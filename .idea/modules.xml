@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bitcoinjava.iml" filepath="$PROJECT_DIR$/bitcoinjava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KnowledgeChecker.iml" filepath="$PROJECT_DIR$/KnowledgeChecker.iml" />
     </modules>
   </component>
 </project>
