@@ -2,6 +2,7 @@ package dao;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.table.TableUtils;
 import entity.Bid;
 import org.json.JSONArray;
@@ -21,16 +22,6 @@ public class BidDao extends AbsDao<Bid> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private int create(Bid bookBid) {
-        try {
-            return dao.create(bookBid);
-        } catch (SQLException e) {
-            System.out.println("duplicate not create bid");
-//            e.printStackTrace();
-        }
-        return 0;
     }
 
     public Bid save(Bid bookBid) {
@@ -54,24 +45,6 @@ public class BidDao extends AbsDao<Bid> {
         return false;
     }
 
-    private Bid findByObject(Bid bid) {
-        try {
-            dao.queryForSameId(bid);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private List<Bid> findByField(String field, double price) {
-        try {
-            return dao.queryForEq(field, price);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public List<Bid> getAll() {
         try {
             dao.queryForAll();
@@ -89,85 +62,34 @@ public class BidDao extends AbsDao<Bid> {
         }
         return 0;
     }
-    public void saveAll(Collection<Bid> bids,long id) {
-        for (Bid b : bids) {
-            b.setId_book(id);
-//            create(b);
-            boolean create = saveOrUpdate(b);
-            if (!create) {
-                System.out.println("bookBid: " + b);
-                System.out.println("find: " + findByField("price", b.getPrice()));
 
-            } else {
-                System.out.println("====save: " + b);
-            }
-        }
-    }
     public ArrayList<Bid> request(Pairs pair) {
         return null;
     }
 
+    private void removeByPrice(String arg) {
+        DeleteBuilder<Bid, String> deleteBuilder = dao.deleteBuilder();
 
+        try {
+            deleteBuilder.where().gt("price", arg);
+            deleteBuilder.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public Collection<Bid> jsonParce(JSONArray array,long id_book) {
+    public Collection<Bid> jsonParce(JSONArray array, long id_book, String price) {
         Collection<Bid> list = new ArrayList<Bid>();
+        removeByPrice(String.valueOf(price));
         for (int i = 0; i < array.length(); i++) {
             JSONArray a = array.getJSONArray(i);
             Bid bookBid = new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2));
             bookBid.setId_book(id_book);
-            boolean create = saveOrUpdate(bookBid);
-            if (!create) {
-                System.out.println("bookBid: " + bookBid);
-                System.out.println("find: " + findByField("price", bookBid.getPrice()));
-            } else {
-                System.out.println("====save: " + bookBid);
-            }
-
-//            long l = create(bookBid);
-//            long l = save(bookBid).getId_bid();
+            saveOrUpdate(bookBid);
             System.out.println("==================================================== ");
             list.add(bookBid);
         }
         return list;
     }
-
-
-//        ArrayList<Long> list = new ArrayList<Long>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            int l =create( new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
-//            System.out.println("==================================================== "+i);
-//            list.add((long) l);
-//        }
-
-    //    private  ArrayList<Long> getRow(JSONArray array) {
-//        ArrayList<Long> list = new ArrayList<Long>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            Bid b=new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2));
-//            list.add(b.getId());
-//        }
-//        return list;
-//    }
-
-
-//    private static ArrayList<double[]> getRow(JSONArray array) {
-//        ArrayList<double[]> list = new ArrayList<double[]>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            list.add(new double[]{a.getDouble(0), a.getDouble(1), a.getDouble(2)});
-//
-//        }
-//        return list;
-//    }
-
-//    private static Collection<Bid> getRow(JSONArray array) {
-//        Collection<Bid> list = new ArrayList<Bid>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            list.add(new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
-//        }
-//        return  list;
-//    }
 
 }

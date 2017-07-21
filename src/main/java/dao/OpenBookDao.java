@@ -78,7 +78,7 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         openBook.setBid_quantity(object.get("bid_quantity").toString());
         openBook.setBid_top(object.get("bid_top").toString());
 
-        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount()+1));
+        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount()+1,openBook.getBid_top()));
 //        JSONArray bid = object.getJSONArray("bid");
 //        openBook.setBid(getRow(bid));
         save(openBook);
