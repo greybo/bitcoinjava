@@ -1,9 +1,10 @@
 package entity;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by m on 18.07.17.
@@ -25,11 +26,10 @@ public class OpenBook {
     private String bid_amount;
     @DatabaseField
     private String bid_top;
-    @DatabaseField(columnName = "bid", foreign = true)
-    private ArrayList<BookBid> bid;
-
-//    @ForeignCollectionField
-//    private ArrayList<double[]> ask;
+    @ForeignCollectionField(eager = true)
+    private Collection<Bid> bid;
+//    @ForeignCollectionField(eager = true)
+//    private Collection<Ask> ask;
 
     public OpenBook() {
     }
@@ -90,13 +90,21 @@ public class OpenBook {
         this.bid_top = bid_top;
     }
 
-    public ArrayList<BookBid> getBid() {
+    public Collection<Bid> getBid() {
         return bid;
     }
 
-    public void setBid(ArrayList<BookBid> bid) {
+    public void setBid(Collection<Bid> bid) {
         this.bid = bid;
     }
+
+//    public Collection<Ask> getAsk() {
+//        return ask;
+//    }
+//
+//    public void setAsk(Collection<Ask> ask) {
+//        this.ask = ask;
+//    }
 
     @Override
     public String toString() {
@@ -109,6 +117,7 @@ public class OpenBook {
                 ", bid_amount='" + bid_amount + '\'' +
                 ", bid_top='" + bid_top + '\'' +
                 ", bid=" + bid +
+//                ", ask=" + ask +
                 '}';
     }
 }

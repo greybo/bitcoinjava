@@ -2,31 +2,31 @@ package dao;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import entity.BookBid;
+import entity.Bid;
 import entity.OpenBook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by m on 18.07.17.
  */
-public class OpenBookDao {
-    private final String url = "jdbc:sqlite:bitcoin.sqlite";
-    private ConnectionSource source;
+public class OpenBookDao extends AbsDao<OpenBook> {
+
     private Dao<OpenBook, String> dao;
+    private String method = "order_book";
+    private Pairs pair;
 
     public OpenBookDao() {
         try {
-            source = new JdbcConnectionSource(url);
-            dao = DaoManager.createDao(source, OpenBook.class);
-            TableUtils.createTableIfNotExists(source, OpenBook.class);
+            dao = DaoManager.createDao(getSource(), OpenBook.class);
+            TableUtils.createTableIfNotExists(getSource(), OpenBook.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,14 +41,18 @@ public class OpenBookDao {
         return null;
     }
 
-    public void save(OpenBook openBook) {
+    public OpenBook save(OpenBook openBook) {
         try {
-//            dao.createOrUpdate(openBook);
-            Dao.CreateOrUpdateStatus cous = dao.createOrUpdate(openBook);
-            System.out.println("save: "+cous.isCreated());
+            return dao.createIfNotExists(openBook);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("duplicate");
+//            e.printStackTrace();
         }
+        return null;
+    }
+
+    public Dao<OpenBook, String> getDao() {
+        return null;
     }
 
     public long getCount() {
@@ -60,9 +64,9 @@ public class OpenBookDao {
         return 0;
     }
 
-    public OpenBook toJsonOpenOrders(String strJson, Pairs pair) {
+    public OpenBook jsonParse(String json) {
 
-        JSONObject dataJsonObj = new JSONObject(strJson);
+        JSONObject dataJsonObj = new JSONObject(json);
         JSONObject object = dataJsonObj.getJSONObject(pair.toString());
         OpenBook openBook = new OpenBook();
         System.out.println(object.toString());
@@ -73,32 +77,37 @@ public class OpenBookDao {
         openBook.setBid_amount(object.get("bid_amount").toString());
         openBook.setBid_quantity(object.get("bid_quantity").toString());
         openBook.setBid_top(object.get("bid_top").toString());
-//
-        JSONArray bid = object.getJSONArray("bid");
-        JSONArray ask = object.getJSONArray("ask");
 
+        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount()+1));
+//        JSONArray bid = object.getJSONArray("bid");
+//        openBook.setBid(getRow(bid));
         save(openBook);
+//        new BidDao().saveAll(openBook.getBid(),getCount() );
+
+//        JSONArray ask = object.getJSONArray("ask");
+
 
         return openBook;
     }
 
-//    private static ArrayList<double[]> getRow(JSONArray array) {
-//        ArrayList<double[]> list = new ArrayList<double[]>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            list.add(new double[]{a.getDouble(0), a.getDouble(1), a.getDouble(2)});
-//
-//        }
-//        return list;
-//    }
-
-    private static ArrayList<BookBid> getRow(JSONArray array) {
-        ArrayList<BookBid> list = new ArrayList<BookBid>();
+    private static Collection<Bid> getRow(JSONArray array) {
+        Collection<Bid> list = new ArrayList<Bid>();
         for (int i = 0; i < array.length(); i++) {
             JSONArray a = array.getJSONArray(i);
-            list.add(new BookBid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
-
+            list.add(new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
         }
         return list;
     }
+
+    public ArrayList<OpenBook> request(Pairs pair) {
+        this.pair = pair;
+        String json = makeRequest(method, pair, new HashMap<String, String>() {{
+            put("limit", "10");
+            put("offset", "0");
+        }});
+        ArrayList<OpenBook> list = new ArrayList<OpenBook>();
+        list.add(jsonParse(json));
+        return list;
+    }
+
 }

@@ -2,8 +2,6 @@ package dao;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import entity.Trades;
 import org.json.JSONArray;
@@ -11,28 +9,27 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by m on 18.07.17.
  */
-public class TradesDao {
-    private final String url = "jdbc:sqlite:bitcoin.sqlite";
-    private ConnectionSource source;
+public class TradesDao extends AbsDao<Trades> {
     private Dao<Trades, String> dao;
+    private String method = "trades";
+    private Pairs pair;
 
     public TradesDao() {
         try {
-            source = new JdbcConnectionSource(url);
-            dao = DaoManager.createDao(source, Trades.class);
-            TableUtils.createTableIfNotExists(source, Trades.class);
+            dao = DaoManager.createDao(getSource(), Trades.class);
+            TableUtils.createTableIfNotExists(getSource(), Trades.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
-    public List<Trades> getAll()  {
+    public List<Trades> getAll() {
         try {
             return dao.queryForAll();
         } catch (SQLException e) {
@@ -41,18 +38,35 @@ public class TradesDao {
         return null;
     }
 
-    public boolean save(Trades trades) {
+    public long getCount() {
         try {
-            dao.createIfNotExists(trades);
-            return true;
+            return dao.countOf();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public ArrayList<Trades> request(Pairs pair) {
+        this.pair = pair;
+        String json = makeRequest(method, pair, new HashMap<String, String>() {{
+            put("limit", "50");
+            put("offset", "0");
+        }});
+        return jsonParse(json);
+    }
+
+    public Trades save(Trades trades) {
+        try {
+            return dao.createIfNotExists(trades);
         } catch (SQLException e) {
             System.out.println("duplicate");
 //            e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
-    public ArrayList<Trades> jsonTrades(String strJson, Pairs pair) {
+    public ArrayList<Trades> jsonParse(String strJson) {
         ArrayList<Trades> list = new ArrayList<Trades>();
         JSONObject jsonObject = new JSONObject(strJson);
 
@@ -69,10 +83,12 @@ public class TradesDao {
             trades.setPrice(object.get("price").toString());
             trades.setType(object.get("type").toString());
 
-            if (save(trades)){
-                System.out.println("====================================================================");
-                System.out.println(trades);
-                System.out.println("====================================================================");
+            Trades t = save(trades);
+            if (t != null) {
+                list.add(t);
+//                System.out.println("====================================================================");
+//                System.out.println(t);
+//                System.out.println("====================================================================");
             }
         }
         return list;
