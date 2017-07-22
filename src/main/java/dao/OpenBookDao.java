@@ -3,14 +3,11 @@ package dao;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.table.TableUtils;
-import entity.Bid;
 import entity.OpenBook;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,10 +48,6 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         return null;
     }
 
-    public Dao<OpenBook, String> getDao() {
-        return null;
-    }
-
     public long getCount() {
         try {
             return dao.countOf();
@@ -65,7 +58,6 @@ public class OpenBookDao extends AbsDao<OpenBook> {
     }
 
     public OpenBook jsonParse(String json) {
-
         JSONObject dataJsonObj = new JSONObject(json);
         JSONObject object = dataJsonObj.getJSONObject(pair.toString());
         OpenBook openBook = new OpenBook();
@@ -78,26 +70,25 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         openBook.setBid_quantity(object.get("bid_quantity").toString());
         openBook.setBid_top(object.get("bid_top").toString());
 
-        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount()+1,openBook.getBid_top()));
+        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount() + 1, openBook.getBid_top()));
+        openBook.setAsk(new AskDao().jsonParce(object.getJSONArray("ask"), getCount() + 1, openBook.getAsk_top()));
+//        JSONArray ask = object.getJSONArray("ask");
 //        JSONArray bid = object.getJSONArray("bid");
 //        openBook.setBid(getRow(bid));
+
         save(openBook);
 //        new BidDao().saveAll(openBook.getBid(),getCount() );
-
-//        JSONArray ask = object.getJSONArray("ask");
-
-
         return openBook;
     }
 
-    private static Collection<Bid> getRow(JSONArray array) {
-        Collection<Bid> list = new ArrayList<Bid>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONArray a = array.getJSONArray(i);
-            list.add(new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
-        }
-        return list;
-    }
+//    private static Collection<Bid> getRow(JSONArray array) {
+//        Collection<Bid> list = new ArrayList<Bid>();
+//        for (int i = 0; i < array.length(); i++) {
+//            JSONArray a = array.getJSONArray(i);
+//            list.add(new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
+//        }
+//        return list;
+//    }
 
     public ArrayList<OpenBook> request(Pairs pair) {
         this.pair = pair;

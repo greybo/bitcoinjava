@@ -28,8 +28,8 @@ public class OpenBook {
     private String bid_top;
     @ForeignCollectionField(eager = true)
     private Collection<Bid> bid;
-//    @ForeignCollectionField(eager = true)
-//    private Collection<Ask> ask;
+    @ForeignCollectionField(eager = true)
+    private Collection<Ask> ask;
 
     public OpenBook() {
     }
@@ -98,13 +98,13 @@ public class OpenBook {
         this.bid = bid;
     }
 
-//    public Collection<Ask> getAsk() {
-//        return ask;
-//    }
-//
-//    public void setAsk(Collection<Ask> ask) {
-//        this.ask = ask;
-//    }
+    public Collection<Ask> getAsk() {
+        return ask;
+    }
+
+    public void setAsk(Collection<Ask> ask) {
+        this.ask = ask;
+    }
 
     @Override
     public String toString() {
