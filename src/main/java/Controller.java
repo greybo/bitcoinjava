@@ -1,16 +1,12 @@
-import dao.BidDao;
-import dao.OpenBookDao;
-import dao.Pairs;
-import dao.TradesDao;
+import dao.*;
 import entity.OpenBook;
 import entity.Trades;
 
 public class Controller {
-
     private Pairs pair;
-    TradesDao trades;
-    OpenBookDao openBook;
-    BidDao bidDao;
+    private TradesDao trades;
+    private OpenBookDao openBook;
+    private UserInfoDao userInfoDao;
 
     public Controller() {
     }
@@ -19,17 +15,16 @@ public class Controller {
         this.pair = pair;
         trades = new TradesDao();
         openBook = new OpenBookDao();
-        bidDao=new BidDao();
+        userInfoDao = new UserInfoDao();
     }
 
     public void sendRequest() {
-        for (Trades t:trades.request(pair)){
+        for (Trades t : trades.request(pair)) {
             System.out.println(t);
         }
-        System.out.println("============================Start==========================");
-        for (OpenBook t:openBook.request(pair)){
-            System.out.println(t);
+        for (OpenBook t : openBook.request(pair)) {
+            System.out.println("===========================request===========================\n" + t);
         }
-        System.out.println("============================End==========================");
+        userInfoDao.request(pair);
     }
 }

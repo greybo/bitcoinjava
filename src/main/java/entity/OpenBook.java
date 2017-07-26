@@ -15,17 +15,17 @@ public class OpenBook {
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField
-    private String ask_quantity;
+    private String askQuantity;
     @DatabaseField
-    private String ask_amount;
+    private String askAmount;
     @DatabaseField
-    private String ask_top;
+    private String askTop;
     @DatabaseField
-    private String bid_quantity;
+    private String bidQuantity;
     @DatabaseField
-    private String bid_amount;
+    private String bidAmount;
     @DatabaseField
-    private String bid_top;
+    private String bidTop;
     @ForeignCollectionField(eager = true)
     private Collection<Bid> bid;
     @ForeignCollectionField(eager = true)
@@ -42,52 +42,52 @@ public class OpenBook {
         this.id = id;
     }
 
-    public String getAsk_quantity() {
-        return ask_quantity;
+    public String getAskQuantity() {
+        return askQuantity;
     }
 
-    public void setAsk_quantity(String ask_quantity) {
-        this.ask_quantity = ask_quantity;
+    public void setAskQuantity(String askQuantity) {
+        this.askQuantity = askQuantity;
     }
 
-    public String getAsk_amount() {
-        return ask_amount;
+    public String getAskAmount() {
+        return askAmount;
     }
 
-    public void setAsk_amount(String ask_amount) {
-        this.ask_amount = ask_amount;
+    public void setAskAmount(String askAmount) {
+        this.askAmount = askAmount;
     }
 
-    public String getAsk_top() {
-        return ask_top;
+    public String getAskTop() {
+        return askTop;
     }
 
-    public void setAsk_top(String ask_top) {
-        this.ask_top = ask_top;
+    public void setAskTop(String askTop) {
+        this.askTop = askTop;
     }
 
-    public String getBid_quantity() {
-        return bid_quantity;
+    public String getBidQuantity() {
+        return bidQuantity;
     }
 
-    public void setBid_quantity(String bid_quantity) {
-        this.bid_quantity = bid_quantity;
+    public void setBidQuantity(String bidQuantity) {
+        this.bidQuantity = bidQuantity;
     }
 
-    public String getBid_amount() {
-        return bid_amount;
+    public String getBidAmount() {
+        return bidAmount;
     }
 
-    public void setBid_amount(String bid_amount) {
-        this.bid_amount = bid_amount;
+    public void setBidAmount(String bidAmount) {
+        this.bidAmount = bidAmount;
     }
 
-    public String getBid_top() {
-        return bid_top;
+    public String getBidTop() {
+        return bidTop;
     }
 
-    public void setBid_top(String bid_top) {
-        this.bid_top = bid_top;
+    public void setBidTop(String bidTop) {
+        this.bidTop = bidTop;
     }
 
     public Collection<Bid> getBid() {
@@ -110,12 +110,12 @@ public class OpenBook {
     public String toString() {
         return "OpenBook{" +
                 "id=" + id +
-                ", ask_quantity='" + ask_quantity + '\'' +
-                ", ask_amount='" + ask_amount + '\'' +
-                ", ask_top='" + ask_top + '\'' +
-                ", bid_quantity='" + bid_quantity + '\'' +
-                ", bid_amount='" + bid_amount + '\'' +
-                ", bid_top='" + bid_top + '\'' +
+                ", askQuantity='" + askQuantity + '\'' +
+                ", askAmount='" + askAmount + '\'' +
+                ", askTop='" + askTop + '\'' +
+                ", bidQuantity='" + bidQuantity + '\'' +
+                ", bidAmount='" + bidAmount + '\'' +
+                ", bidTop='" + bidTop + '\'' +
                 ", bid=" + bid +
 //                ", ask=" + ask +
                 '}';

@@ -15,7 +15,6 @@ import java.util.List;
  * Created by m on 18.07.17.
  */
 public class OpenBookDao extends AbsDao<OpenBook> {
-
     private Dao<OpenBook, String> dao;
     private String method = "order_book";
     private Pairs pair;
@@ -63,32 +62,18 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         OpenBook openBook = new OpenBook();
         System.out.println(object.toString());
 
-        openBook.setAsk_quantity(object.get("ask_quantity").toString());
-        openBook.setAsk_amount(object.get("ask_amount").toString());
-        openBook.setAsk_top(object.get("ask_top").toString());
-        openBook.setBid_amount(object.get("bid_amount").toString());
-        openBook.setBid_quantity(object.get("bid_quantity").toString());
-        openBook.setBid_top(object.get("bid_top").toString());
+        openBook.setAskQuantity(object.get("ask_quantity").toString());
+        openBook.setAskAmount(object.get("ask_amount").toString());
+        openBook.setAskTop(object.get("ask_top").toString());
+        openBook.setBidAmount(object.get("bid_amount").toString());
+        openBook.setBidQuantity(object.get("bid_quantity").toString());
+        openBook.setBidTop(object.get("bid_top").toString());
 
-        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount() + 1, openBook.getBid_top()));
-        openBook.setAsk(new AskDao().jsonParce(object.getJSONArray("ask"), getCount() + 1, openBook.getAsk_top()));
-//        JSONArray ask = object.getJSONArray("ask");
-//        JSONArray bid = object.getJSONArray("bid");
-//        openBook.setBid(getRow(bid));
+        openBook.setBid(new BidDao().jsonParce(object.getJSONArray("bid"), getCount() + 1, openBook.getBidTop()));
+        openBook.setAsk(new AskDao().jsonParce(object.getJSONArray("ask"), getCount() + 1, openBook.getAskTop()));
 
-        save(openBook);
-//        new BidDao().saveAll(openBook.getBid(),getCount() );
-        return openBook;
+        return save(openBook);
     }
-
-//    private static Collection<Bid> getRow(JSONArray array) {
-//        Collection<Bid> list = new ArrayList<Bid>();
-//        for (int i = 0; i < array.length(); i++) {
-//            JSONArray a = array.getJSONArray(i);
-//            list.add(new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2)));
-//        }
-//        return list;
-//    }
 
     public ArrayList<OpenBook> request(Pairs pair) {
         this.pair = pair;

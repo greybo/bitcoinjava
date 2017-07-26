@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Ask {
 
     @DatabaseField(generatedId = true)
-    private long id_ask;
+    private long idAsk;
     @DatabaseField(unique = true)
     private double price;
     @DatabaseField
@@ -17,7 +17,7 @@ public class Ask {
     @DatabaseField(foreign = true)
     private OpenBook openBook;
     @DatabaseField
-    private long id_book;
+    private long idBook;
 
     public Ask() {
     }
@@ -28,12 +28,12 @@ public class Ask {
         this.vol = vol;
     }
 
-    public long getId_ask() {
-        return id_ask;
+    public long getIdAsk() {
+        return idAsk;
     }
 
-    public void setId_ask(long id_ask) {
-        this.id_ask = id_ask;
+    public void setIdAsk(long idAsk) {
+        this.idAsk = idAsk;
     }
 
     public double getPrice() {
@@ -60,12 +60,12 @@ public class Ask {
         this.vol = vol;
     }
 
-    public long getId_book() {
-        return id_book;
+    public long getIdBook() {
+        return idBook;
     }
 
-    public void setId_book(long id_book) {
-        this.id_book = id_book;
+    public void setIdBook(long idBook) {
+        this.idBook = idBook;
     }
 
     public OpenBook getOpenBook() {
@@ -79,12 +79,12 @@ public class Ask {
     @Override
     public String toString() {
         return "Ask{" +
-                "id_ask=" + id_ask +
+                "idAsk=" + idAsk +
                 ", price=" + price +
                 ", lot=" + lot +
                 ", vol=" + vol +
                 ", openBook=" + openBook +
-                ", id_book=" + id_book +
+                ", idBook=" + idBook +
                 '}';
     }
 }

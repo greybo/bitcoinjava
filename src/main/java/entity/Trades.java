@@ -10,8 +10,8 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Trades {
     @DatabaseField(generatedId = true)
     private long id;
-    @DatabaseField(uniqueIndex = true)
-    private long trade_id;
+    @DatabaseField(columnName = "trade_id",uniqueIndex = true)
+    private long tradeId;
     @DatabaseField
     private String type;
     @DatabaseField
@@ -27,12 +27,12 @@ public class Trades {
 
     }
 
-    public long getTrade_id() {
-        return trade_id;
+    public long getTradeId() {
+        return tradeId;
     }
 
-    public void setTrade_id(long trade_id) {
-        this.trade_id = trade_id;
+    public void setTradeId(long tradeId) {
+        this.tradeId = tradeId;
     }
 
     public String getType() {
@@ -78,7 +78,7 @@ public class Trades {
     @Override
     public String toString() {
         return "Trades{" +
-                "trade_id='" + trade_id + '\'' +
+                "tradeId='" + tradeId + '\'' +
                 ", type='" + type + '\'' +
                 ", quantity='" + quantity + '\'' +
                 ", price='" + price + '\'' +

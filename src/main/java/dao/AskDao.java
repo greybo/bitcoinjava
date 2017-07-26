@@ -83,7 +83,7 @@ public class AskDao extends AbsDao<Ask> {
         for (int i = 0; i < array.length(); i++) {
             JSONArray a = array.getJSONArray(i);
             Ask bookAsk = new Ask(a.getDouble(0), a.getDouble(1), a.getDouble(2));
-            bookAsk.setId_book(id_book);
+            bookAsk.setIdBook(id_book);
             saveOrUpdate(bookAsk);
             System.out.println("========================ASK============================ ");
             list.add(bookAsk);

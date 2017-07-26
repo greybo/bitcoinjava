@@ -18,7 +18,6 @@ import java.util.List;
 public class TradesDao extends AbsDao<Trades> {
     private Dao<Trades, String> dao;
     private String method = "trades";
-    private Pairs pair;
 
     public TradesDao() {
         try {
@@ -27,6 +26,17 @@ public class TradesDao extends AbsDao<Trades> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Trades save(Trades trades) {
+        try {
+            return dao.createIfNotExists(trades);
+        } catch (SQLException e) {
+            System.out.println("duplicate");
+//            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Trades> getAll() {
@@ -48,47 +58,29 @@ public class TradesDao extends AbsDao<Trades> {
     }
 
     public ArrayList<Trades> request(Pairs pair) {
-        this.pair = pair;
         String json = makeRequest(method, pair, new HashMap<String, String>() {{
             put("limit", "50");
             put("offset", "0");
         }});
-        return jsonParse(json);
-    }
-
-    public Trades save(Trades trades) {
-        try {
-            return dao.createIfNotExists(trades);
-        } catch (SQLException e) {
-            System.out.println("duplicate");
-//            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public ArrayList<Trades> jsonParse(String strJson) {
+        Trades t = null;
         ArrayList<Trades> list = new ArrayList<Trades>();
-        JSONObject jsonObject = new JSONObject(strJson);
-
+        JSONObject jsonObject = new JSONObject(json);
         JSONArray array = jsonObject.getJSONArray(pair.toString());
 
         for (int i = 0; i < array.length(); i++) {
             Trades trades = new Trades();
             JSONObject object = array.getJSONObject(i);
 
-            trades.setTrade_id(object.getLong("trade_id"));
+            trades.setTradeId(object.getLong("trade_id"));
             trades.setDate(object.get("date").toString());
             trades.setAmount(object.get("amount").toString());
             trades.setQuantity(object.get("quantity").toString());
             trades.setPrice(object.get("price").toString());
             trades.setType(object.get("type").toString());
+            t = save(trades);
 
-            Trades t = save(trades);
             if (t != null) {
                 list.add(t);
-//                System.out.println("====================================================================");
-//                System.out.println(t);
-//                System.out.println("====================================================================");
             }
         }
         return list;

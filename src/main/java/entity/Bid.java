@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable
 public class Bid {
     @DatabaseField(generatedId = true)
-    private long id_bid;
+    private long idBid;
     @DatabaseField(unique = true)
     private double price;
     @DatabaseField
@@ -16,7 +16,7 @@ public class Bid {
     @DatabaseField(foreign = true)
     private OpenBook openBook;
     @DatabaseField
-    private long id_book;
+    private long idBook;
 
     public Bid() {
     }
@@ -27,12 +27,12 @@ public class Bid {
         this.vol = vol;
     }
 
-    public long getId_bid() {
-        return id_bid;
+    public long getIdBid() {
+        return idBid;
     }
 
-    public void setId_bid(long id_bid) {
-        this.id_bid = id_bid;
+    public void setIdBid(long idBid) {
+        this.idBid = idBid;
     }
 
     public double getPrice() {
@@ -67,22 +67,22 @@ public class Bid {
         this.openBook = openBook;
     }
 
-    public long getId_book() {
-        return id_book;
+    public long getIdBook() {
+        return idBook;
     }
 
-    public void setId_book(long id_book) {
-        this.id_book = id_book;
+    public void setIdBook(long idBook) {
+        this.idBook = idBook;
     }
 
     @Override
     public String toString() {
         return "Bid{" +
-                "id_bid=" + id_bid +
+                "idBid=" + idBid +
                 ", price=" + price +
                 ", lot=" + lot +
                 ", vol=" + vol +
-                ", id_book=" + id_book +
+                ", idBook=" + idBook +
                 '}';
     }
 }

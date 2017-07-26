@@ -1,7 +1,8 @@
-package dao; /**
+package exmo; /**
  * Created by Admin on 2/18/2016.
  */
 
+import dao.Pairs;
 import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 
@@ -19,6 +20,11 @@ public class Exmo {
     private static long _nonce;
     private String _key;
     private String _secret;
+    private String URL = "https://api.exmo.com/v1/%s/?pair=%s";
+
+    public Exmo() {
+        this(null, null);
+    }
 
     public Exmo(String key, String secret) {
         _nonce = System.nanoTime();
@@ -26,16 +32,35 @@ public class Exmo {
         _secret = secret;
     }
 
-    public final String Request(String method, Map<String, String> arguments) {
+    private String getURL(String method, Pairs pair) {
+        return String.format(URL, method, pair.toString());
+    }
+
+    private String request(String url, Map<String, String> arguments) {
+        OkHttpClient client = new OkHttpClient();
+        Request reqPublTrades = new Request.Builder().url(url)
+                .build();
+        try {
+            Response response = client.newCall(reqPublTrades).execute();
+            return response.body().string();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return null;
+    }
+
+    public final String request(String method, Pairs pair, Map<String, String> arguments) {
         Mac mac;
         SecretKeySpec key;
         String sign;
+        String url=getURL(method,pair);
 
         if (arguments == null) {  // If the user provided no arguments, just save an empty argument array.
             arguments = new HashMap<String, String>();
         }
 
         arguments.put("nonce", "" + ++_nonce);  // Add the dummy nonce.
+
 
         String postData = "";
 
@@ -48,6 +73,9 @@ public class Exmo {
             postData += argument.getKey() + "=" + argument.getValue();
         }
 
+        if (_key == null || _secret == null) {
+            return request(url, arguments);
+        }
         // Create a new secret key
         try {
             key = new SecretKeySpec(_secret.getBytes("UTF-8"), "HmacSHA512");
@@ -89,16 +117,16 @@ public class Exmo {
 
             RequestBody body = RequestBody.create(form, postData);
             Request request = new Request.Builder()
-                    .url("https://api.exmo.com/v1/" + method)
+                    .url(url)
                     .addHeader("Key", _key)
                     .addHeader("Sign", sign)
                     .post(body)
                     .build();
-            
+
             Response response = client.newCall(request).execute();
             return response.body().string();
         } catch (IOException e) {
-            System.err.println("Request fail: " + e.toString());
+            System.err.println("request fail: " + e.toString());
             return null;  // An error occured...
         }
     }

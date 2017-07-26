@@ -85,7 +85,7 @@ public class BidDao extends AbsDao<Bid> {
         for (int i = 0; i < array.length(); i++) {
             JSONArray a = array.getJSONArray(i);
             Bid bookBid = new Bid(a.getDouble(0), a.getDouble(1), a.getDouble(2));
-            bookBid.setId_book(id_book);
+            bookBid.setIdBook(id_book);
             saveOrUpdate(bookBid);
             System.out.println("=========================BID=========================== ");
             list.add(bookBid);
