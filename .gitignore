@@ -1,2 +1,6 @@
 /bitcoin.sqlite
 /config.properties
+.idea/workspace.xml
+icon.jpeg
+src/main/java/test/
+target/
