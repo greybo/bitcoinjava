@@ -6,13 +6,14 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.table.TableUtils;
 import entity.Bid;
 import org.json.JSONArray;
+import utils.Pairs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class BidDao extends AbsDao<Bid> {
+public class BidDao extends AbsDao {
 
     private Dao<Bid, String> dao;
 

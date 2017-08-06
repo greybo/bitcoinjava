@@ -6,6 +6,7 @@ import com.j256.ormlite.table.TableUtils;
 import entity.Trades;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utils.Pairs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by m on 18.07.17.
  */
-public class TradesDao extends AbsDao<Trades> {
+public class TradesDao extends AbsDao {
     private Dao<Trades, String> dao;
     private String method = "trades";
 
@@ -28,7 +29,7 @@ public class TradesDao extends AbsDao<Trades> {
         }
     }
 
-    @Override
+
     public Trades save(Trades trades) {
         try {
             return dao.createIfNotExists(trades);
@@ -48,6 +49,7 @@ public class TradesDao extends AbsDao<Trades> {
         return null;
     }
 
+
     public long getCount() {
         try {
             return dao.countOf();
@@ -58,14 +60,14 @@ public class TradesDao extends AbsDao<Trades> {
     }
 
     public ArrayList<Trades> request(Pairs pair) {
-        String json = makeRequest(method, pair, new HashMap<String, String>() {{
-            put("limit", "50");
+        String json = makeRequest(method,  new HashMap<String, String>() {{
+            put("limit", "10");
             put("offset", "0");
         }});
         Trades t = null;
         ArrayList<Trades> list = new ArrayList<Trades>();
         JSONObject jsonObject = new JSONObject(json);
-        JSONArray array = jsonObject.getJSONArray(pair.toString());
+        JSONArray array = jsonObject.getJSONArray(getPair().toString());
 
         for (int i = 0; i < array.length(); i++) {
             Trades trades = new Trades();

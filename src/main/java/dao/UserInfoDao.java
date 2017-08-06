@@ -1,32 +1,17 @@
 package dao;
 
-import java.util.List;
+import entity.UserInfo;
 
 public class UserInfoDao extends AbsDao {
-    //    private Dao<Trades, String> dao;
-    private String method = "user_info";
-
+    private UserInfo userInfo;
 
     public UserInfoDao() {
-//        dao = DaoManager.createDao(getSource(), UserInfo.class);
-//        TableUtils.createTableIfNotExists(getSource(), UserInfo.class);
+        userInfo = new UserInfo();
     }
 
-    public Object save(Object o) {
-        return null;
-    }
-
-    public List getAll() {
-        return null;
-    }
-
-    public long getCount() {
-        return 0;
-    }
-
-    public void request(Pairs pair) {
-        String json = makeRequest(method, pair, null);
-        System.out.println("=================================UserInfo==============================\n" + json);
-//        return null;
+    public UserInfo request() {
+        String json = makeRequest("user_info");
+//        System.out.println("=================================UserInfo==============================\n" + json);
+        return userInfo.jsonParce(json);
     }
 }

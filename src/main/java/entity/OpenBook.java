@@ -117,7 +117,7 @@ public class OpenBook {
                 ", bidAmount='" + bidAmount + '\'' +
                 ", bidTop='" + bidTop + '\'' +
                 ", bid=" + bid +
-//                ", ask=" + ask +
+                ", ask=" + ask +
                 '}';
     }
 }

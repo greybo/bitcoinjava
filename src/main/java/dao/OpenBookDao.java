@@ -5,21 +5,23 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.table.TableUtils;
 import entity.OpenBook;
 import org.json.JSONObject;
+import utils.Pairs;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by m on 18.07.17.
  */
-public class OpenBookDao extends AbsDao<OpenBook> {
+public class OpenBookDao extends AbsDao {
     private Dao<OpenBook, String> dao;
+
     private String method = "order_book";
     private Pairs pair;
 
     public OpenBookDao() {
+//        dao=initDao();
         try {
             dao = DaoManager.createDao(getSource(), OpenBook.class);
             TableUtils.createTableIfNotExists(getSource(), OpenBook.class);
@@ -56,9 +58,20 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         return 0;
     }
 
+    public OpenBook getLastRow() {
+        try {
+            List<OpenBook> openBooks = dao.query(dao.queryBuilder()
+                    .orderBy("id", false).limit(1L).prepare());
+            return openBooks.get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public OpenBook jsonParse(String json) {
         JSONObject dataJsonObj = new JSONObject(json);
-        JSONObject object = dataJsonObj.getJSONObject(pair.toString());
+        JSONObject object = dataJsonObj.getJSONObject(getPair().toString());
         OpenBook openBook = new OpenBook();
         System.out.println(object.toString());
 
@@ -75,15 +88,17 @@ public class OpenBookDao extends AbsDao<OpenBook> {
         return save(openBook);
     }
 
-    public ArrayList<OpenBook> request(Pairs pair) {
+    //    public ArrayList<OpenBook> request(Pairs pair) {
+    public OpenBook request(Pairs pair) {
         this.pair = pair;
-        String json = makeRequest(method, pair, new HashMap<String, String>() {{
+        String json = makeRequest(method,  new HashMap<String, String>() {{
             put("limit", "10");
             put("offset", "0");
         }});
-        ArrayList<OpenBook> list = new ArrayList<OpenBook>();
-        list.add(jsonParse(json));
-        return list;
+//        ArrayList<OpenBook> list = new ArrayList<OpenBook>();
+//        list.add(jsonParse(json));
+        return jsonParse(json);
+//        return list;
     }
 
 }

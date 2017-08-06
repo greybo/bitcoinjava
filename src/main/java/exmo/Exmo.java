@@ -2,7 +2,7 @@ package exmo; /**
  * Created by Admin on 2/18/2016.
  */
 
-import dao.Pairs;
+import utils.Pairs;
 import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 
@@ -14,7 +14,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class Exmo {
     private static long _nonce;

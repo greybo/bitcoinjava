@@ -6,13 +6,14 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.table.TableUtils;
 import entity.Ask;
 import org.json.JSONArray;
+import utils.Pairs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AskDao extends AbsDao<Ask> {
+public class AskDao extends AbsDao {
     private Dao<Ask, String> dao;
 
     public AskDao() {
@@ -84,9 +85,10 @@ public class AskDao extends AbsDao<Ask> {
             JSONArray a = array.getJSONArray(i);
             Ask bookAsk = new Ask(a.getDouble(0), a.getDouble(1), a.getDouble(2));
             bookAsk.setIdBook(id_book);
-            saveOrUpdate(bookAsk);
-            System.out.println("========================ASK============================ ");
-            list.add(bookAsk);
+            if (saveOrUpdate(bookAsk)) {
+                list.add(bookAsk);
+            }
+            System.out.println("============================ASK============================");
         }
         return list;
     }
